@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - List Clients {% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+
+    <div class="content-wrapper">
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title">
+                    <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Home</span> - Clients</h4>
+                </div>
+            </div>
+
+            <div class="breadcrumb-line">
+                <ul class="breadcrumb">
+                    <li><a href="{{ path('user_index') }}"><i class="icon-home2 position-left"></i> Home</a></li>
+                    <li><a href="{{ path('client_index') }}">Clients</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /page header -->
+
+        <!-- Content area -->
+        <div class="content">
+
+            <!-- Table -->
+            <div class="panel panel-flat" style="padding-left: 40px; padding-right: 40px;">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-10">
+                            <h5 class="panel-title">
+                                Client Repository
+                                <div class="count" style="padding-top: 15px;padding-bottom: 25px;">
+                                    Total Clients: {{ clients.getTotalItemCount }}
+                                </div>
+                            </h5>
+                            <div style="padding-top: 25px;">
+                                <form action="{{ path('client_index') }}" class="form-inline" method="get" style="padding-bottom: 10px; font-size: 1.25em;">
+                                    <input type="text" class="form-control" name="filter">
+                                    <button type="submit" class="btn btn-default">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-2"><a class="btn btn-success" href="{{ path('client_new') }}">Add Client</a></div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>{{ knp_pagination_sortable(clients, 'ID', 'u.id') }}</th>
+                            <th {% if clients.isSorted('u.nom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Nom', 'u.nom') }}</th>
+                            <th {% if clients.isSorted('u.prenom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Prenom', 'u.prenom') }}</th>
+                            <th {% if clients.isSorted('u.email') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Email', 'u.email') }}</th>
+                            <th {% if clients.isSorted('u.adresse') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Adresse', 'u.adresse') }}</th>
+                            <th {% if clients.isSorted('u.telephone') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Telephone', 'u.telephone') }}</th>
+                            <th {% if clients.isSorted('u.produit') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Produit', 'u.produit') }}</th>
+                            <th {% if clients.isSorted('u.dateDebut') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Date Debut', 'u.dateDebut') }}</th>
+                            <th {% if clients.isSorted('u.duree') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Durée', 'u.duree') }}</th>
+                            <th {% if clients.isSorted('u.prix') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Prix', 'u.prix') }}</th>
+                            {% if app.user.role == 'ROLE_MANAGER' %}
+                                <th {% if clients.isSorted('u.vendor.nom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(clients, 'Vendeur', 'u.vendor.nom u.vendor.prenom') }}</th>
+                            {% endif %}
+                            <th></th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for client in clients %}
+                            <tr>
+                                <td>{{ "%04d"|format(client.id) }}</td>
+                                <td>{{ client.nom }}</td>
+                                <td>{{ client.prenom }}</td>
+                                <td>{{ client.email }}</td>
+                                <td>{{ client.adresse }}</td>
+                                <td>{{ client.telephone }}</td>
+                                <td>{{ client.produit }}</td>
+                                <td>{{ client.dateDebut | date("d-m-Y") }}</td>
+                                <td>{{ client.duree }}</td>
+                                <td>{{ client.prix }}</td>
+                                {% if app.user.role == 'ROLE_MANAGER' %}
+                                    <td>{{ client.vendor.nom }} {{ client.vendor.prenom }}</td>
+                                {% endif %}
+                                <td>
+                                    {% if client.suivi == null and client.tech == null %}
+                                        <span class="label bg-success-400">New Sale</span>
+                                    {% elseif  client.suivi == null %}
+                                        <span class="label bg-success-400">Service Tech</span>
+                                    {% else %}
+                                        <span class="label bg-success-400">Service Suivi</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <ul class="icons-list mt-15">
+                                        <li><a href="{{ path('client_edit', {'id': client.id}) }}" data-popup="tooltip" title="Edit"><i class="icon-pencil5"></i></a></li>
+                                        <li><a href="{{ path('client_delete', {'id': client.id}) }}" data-popup="tooltip" title="Delete" onclick="return confirm('Are you sure you want to Delete this Client?')"><i class=" icon-trash"></i></a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {# display navigation #}
+                    <div class="navigation text-center">
+                        {{ knp_pagination_render(clients) }}
+                    </div>
+                </div>
+            </div>
+            <!-- /table -->
+            {{ include('footer.html.twig') }}
+        </div>
+        <!-- /content area -->
+    </div>
+    </div>
+    <!-- /page content -->
+    </div>
+    <!-- /page container -->
+{% endblock %}

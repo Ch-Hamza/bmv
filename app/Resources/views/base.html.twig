@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Administration{% endblock %}</title>
+
+    {% block stylesheets %}
+        <!-- Global stylesheets -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/css/icons/icomoon/styles.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/css/core.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/css/components.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/css/colors.css') }}" rel="stylesheet" type="text/css">
+        <!-- /global stylesheets -->
+
+
+        <!-- Core JS files -->
+        <script type="text/javascript" src="{{ asset('assets/js/plugins/loaders/pace.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/core/libraries/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/core/libraries/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/plugins/loaders/blockui.min.js') }}"></script>
+        <!-- /core JS files -->
+
+        <!-- Theme JS files -->
+        <script type="text/javascript" src="{{ asset('assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/core/app.js') }}"></script>
+        <!-- /theme JS files -->
+    {% endblock %}
+
+</head>
+
+<body>
+
+{% block body %}
+
+<!-- Main navbar -->
+<div class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <a href="{{ path('user_index') }}"><img style="padding-left: 25px;" src="{{ asset('assets/images/logo.png') }}" alt=""></a>
+
+        <ul class="nav navbar-nav visible-xs-block">
+            <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar-mobile">
+        <ul class="nav navbar-nav">
+            <li><a class="sidebar-control sidebar-main-toggle hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-user">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="{{ asset('assets/images/default.png') }}" alt="" style="width: 30px; height: 30px; object-fit: cover;">
+                    <span>{{ app.user.username }}</span>
+                    <i class="caret"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-switch2"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- /main navbar -->
+
+
+<!-- Page container -->
+<div class="page-container">
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-main">
+            <div class="sidebar-content">
+
+                <!-- User menu -->
+                <div class="sidebar-user">
+                    <div class="category-content">
+                        <div class="media">
+                            <a class="media-left"><img src="{{ asset('assets/images/default.png') }}" class="img-circle img-sm" style="object-fit: cover;" alt=""></a>
+                            <div class="media-body">
+                                <span class="media-heading text-semibold">{{ app.user.nom }} {{ app.user.prenom }}</span>
+                                <div class="text-size-mini text-muted">
+                                    <i class="icon-pin text-size-small"></i>
+                                    {% if app.user.role == 'ROLE_USER' %}
+                                        Agent {{ app.user.service }}
+                                    {% elseif app.user.role == 'ROLE_MANAGER' %}
+                                        Manager {{ app.user.service }}
+                                    {% else %}
+                                        Administrateur
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /user menu -->
+
+                <!-- Main navigation -->
+                <div class="sidebar-category sidebar-category-visible">
+                    <div class="category-content no-padding">
+                        <ul class="navigation navigation-main navigation-accordion">
+
+                            <li {% if app.request.attributes.get('_route') == 'user_index' %} class="active"{% endif %}>
+                                <a href="{{ path('user_index') }}"><i class="icon-home4"></i> <span>Utilisateurs</span></a>
+                            </li>
+
+                            <li {% if app.request.attributes.get('_route') == 'client_index' %} class="active"{% endif %}>
+                                <a href="{{ path('client_index') }}"><i class="icon-bell2"></i> <span>Clients</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /main navigation -->
+            </div>
+        </div>
+        <!-- /main sidebar -->
+        {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+client:
+    resource: "@ClientBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+user:
+    resource: "@UserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_user_security:
+   resource: "@FOSUserBundle/Resources/config/routing/security.xml"

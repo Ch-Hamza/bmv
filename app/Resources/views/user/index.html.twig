@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - List Utilisateurs {% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+
+    <div class="content-wrapper">
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title">
+                    <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Home</span> - Utilisateurs</h4>
+                </div>
+            </div>
+
+            <div class="breadcrumb-line">
+                <ul class="breadcrumb">
+                    <li><a href="{{ path('user_index') }}"><i class="icon-home2 position-left"></i> Home</a></li>
+                    <li><a href="{{ path('user_index') }}">Utilisateurs</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /page header -->
+
+        <!-- Content area -->
+        <div class="content">
+
+            <!-- Table -->
+            <div class="panel panel-flat" style="padding-left: 40px; padding-right: 40px;">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-10">
+                            <h5 class="panel-title">
+                                User Repository
+                                <div class="count" style="padding-top: 15px;">
+                                    Total Utilisateurs: {{ users.getTotalItemCount }}
+                                </div>
+                            </h5>
+                            <div style="padding-top: 25px;">
+                                <form action="{{ path('user_index') }}" class="form-inline" method="get" style="padding-bottom: 10px; padding-top: 10px;font-size: 1.25em;">
+                                    <input type="text" class="form-control" name="filter">
+                                    <button type="submit" class="btn btn-default">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"><a class="btn btn-success" href="{{ path('user_new', {'role': 'user'}) }}">Add User</a></div>
+                            {% if app.user.role == 'ROLE_MANAGER' or app.user.roles[0] == 'ROLE_ADMIN' %}
+                                <div class="col-sm-1"><a class="btn btn-success" href="{{ path('user_new', {'role': 'manager'}) }}">Add Manager</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>{{ knp_pagination_sortable(users, 'ID', 'u.id') }}</th>
+                            <th {% if users.isSorted('u.nom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(users, 'Nom', 'u.nom') }}</th>
+                            <th {% if users.isSorted('u.prenom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(users, 'Prenom', 'u.prenom') }}</th>
+                            <th {% if users.isSorted('u.nom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(users, 'Rôle', 'u.role') }}</th>
+                            <th {% if users.isSorted('u.nom') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(users, 'Service', 'u.service') }}</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ "%04d"|format(user.id) }}</td>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.prenom }}</td>
+                                <td>
+                                    {% if user.role == 'ROLE_USER' %}
+                                        Agent
+                                    {% elseif user.role == 'ROLE_MANAGER' %}
+                                        Manager
+                                    {% else %}
+                                        ADMIN
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.service }}</td>
+                                <td>
+                                    <ul class="icons-list mt-15">
+                                        <li><a href="{{ path('user_edit', {'id': user.id}) }}" data-popup="tooltip" title="Edit"><i class="icon-pencil5"></i></a></li>
+                                        <li><a href="{{ path('user_delete', {'id': user.id}) }}" data-popup="tooltip" title="Delete" onclick="return confirm('Are you sure you want to Delete this User?')"><i class=" icon-trash"></i></a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {# display navigation #}
+                    <div class="navigation text-center">
+                        {{ knp_pagination_render(users) }}
+                    </div>
+                </div>
+            </div>
+            <!-- /table -->
+            {{ include('footer.html.twig') }}
+        </div>
+        <!-- /content area -->
+    </div>
+    </div>
+    <!-- /page content -->
+    </div>
+    <!-- /page container -->
+{% endblock %}

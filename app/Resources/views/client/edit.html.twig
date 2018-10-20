@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Modifier Client {% endblock %}
+
+{% block body %}
+    {{  parent() }}
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title">
+                    <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Home</span> - Clients</h4>
+                </div>
+            </div>
+
+            <div class="breadcrumb-line">
+                <ul class="breadcrumb">
+                    <li><a href="{{ path('user_index') }}"><i class="icon-home2 position-left"></i> Home</a></li>
+                    <li><a href="{{ path('client_index') }}">Clients</a></li>
+                    <li class="active">New Client</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /page header -->
+
+        <!-- Content area -->
+        <div class="content">
+            <!-- Horizontal form -->
+            <div class="panel panel-flat">
+                <div class="panel-body">
+                    <div class="container">
+                        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                        {{ form_errors(form) }}
+                        <h5>Client Info</h5>
+                        <hr>
+                        <div class="form-group">
+                            {{ form_label(form.nom, "Nom", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.nom) }}
+                            </div>
+                            {{ form_errors(form.nom) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.prenom, "Prenom", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.prenom) }}
+                            </div>
+                            {{ form_errors(form.prenom) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.email, "Email", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.email) }}
+                            </div>
+                            {{ form_errors(form.prenom) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.adresse, "Adresse", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.adresse) }}
+                            </div>
+                            {{ form_errors(form.adresse) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.telephone, "Téléphone", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.telephone) }}
+                            </div>
+                            {{ form_errors(form.telephone) }}
+                        </div>
+                        <hr>
+                        <h5>Sale Info</h5>
+                        <hr>
+                        <div class="form-group">
+                            {{ form_label(form.produit, "Produit", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.produit, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            {{ form_errors(form.produit) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.dateDebut, "Date Debut", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.dateDebut, {'label_attr': {'class': 'pickadate'}}) }}
+                            </div>
+                            {{ form_errors(form.dateDebut) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.duree, "Durée", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.duree) }}
+                            </div>
+                            {{ form_errors(form.duree) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.prix, "Prix", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                            <div class="col-lg-10">
+                                {{ form_widget(form.prix) }}
+                            </div>
+                            {{ form_errors(form.prix) }}
+                        </div>
+                        {% if app.user.role == 'ROLE_MANAGER' or app.user.roles[0] == 'ROLE_ADMIN' %}
+                            <hr>
+                            Assign Tasks
+                            <hr>
+                            {% if form.tech is defined %}
+                                <div class="form-group">
+                                    {{ form_label(form.tech, "Agent Technique", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                                    <div class="col-lg-10">
+                                        {{ form_widget(form.tech) }}
+                                    </div>
+                                    {{ form_errors(form.tech) }}
+                                </div>
+                            {% endif %}
+                            {% if form.suivi is defined %}
+                                <div class="form-group">
+                                    {{ form_label(form.suivi, "Agent Suivi", {'label_attr': {'class': 'control-label col-lg-2'}}) }}
+                                    <div class="col-lg-10">
+                                        {{ form_widget(form.suivi) }}
+                                    </div>
+                                    {{ form_errors(form.suivi) }}
+                                </div>
+                            {% endif %}
+
+
+                        {% endif %}
+                        <div class="container">
+                            <div class="row">
+                                <input type="submit" value="Save" class="btn bg-teal-300" />
+                                <a class="btn btn-default" href="{{ path('client_index') }}">Back</a>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <!-- /horizotal form -->
+            {% include 'footer.html.twig' %}
+        </div>
+        <!-- /content area -->
+
+    </div>
+    <!-- /main content -->
+    </div>
+    <!-- /page content -->
+
+    </div>
+    <!-- /page container -->
+
+{% endblock %}
