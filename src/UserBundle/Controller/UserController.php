@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function tAction()
     {
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('client_index');
     }
 
     /**
@@ -27,6 +27,13 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->getRepository(User::class)->createQueryBuilder('u')
             ->where('u.enabled = true');
+
+        if($this->getUser()->getRole() == 'ROLE_MANAGER')
+        {
+            $queryBuilder->andWhere('u.service = :ser')
+                ->setParameter('ser', $this->getUser()->getService());
+        }
+
         if($request->query->getAlnum('filter')) {
             $queryBuilder->where('u.nom LIKE :name')
                 ->setParameter('name', '%'.$request->query->getAlnum('filter').'%');
@@ -54,15 +61,6 @@ class UserController extends Controller
         $userManger = $this->get('fos_user.user_manager');
         $user = $userManger->createUser();
         $user->setEnabled(true);
-        if($role == 'manager')
-        {
-            $user->setRole('ROLE_MANAGER');
-            $user->addRole('ROLE_MANAGER');
-        }
-        elseif($role == 'user') {
-            $user->setRole('ROLE_USER');
-            $user->addRole('ROLE_USER');
-        }
 
         $form = $this->createForm('UserBundle\Form\UserType', $user);
         $form->handleRequest($request);
@@ -73,6 +71,14 @@ class UserController extends Controller
             $encoder = $encoder_service->getEncoder($user);
             $encoded_pass = $encoder->encodePassword($user->getPassword(), $user->getSalt());
             $user->setPassword($encoded_pass);
+            if($role == 'manager')
+            {
+                $user->setRole('ROLE_MANAGER');
+                $user->addRole('ROLE_MANAGER');
+            }
+            elseif($role == 'user') {
+                $user->setRole('ROLE_USER');
+            }
 
             $userManger->updateUser($user);
             return $this->redirectToRoute('user_index');

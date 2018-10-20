@@ -19,6 +19,7 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->getRepository(Client::class)->createQueryBuilder('u')
             ->where('u.enabled = true');
+
         if($this->getUser()->getRole() == 'ROLE_MANAGER')
         {
             if($this->getUser()->getService() == 'Technique')

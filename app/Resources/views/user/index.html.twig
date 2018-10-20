@@ -47,7 +47,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-1"><a class="btn btn-success" href="{{ path('user_new', {'role': 'user'}) }}">Add User</a></div>
-                            {% if app.user.role == 'ROLE_MANAGER' or app.user.roles[0] == 'ROLE_ADMIN' %}
+                            {% if app.user.roles[0] == 'ROLE_ADMIN' %}
                                 <div class="col-sm-1"><a class="btn btn-success" href="{{ path('user_new', {'role': 'manager'}) }}">Add Manager</a></div>
                             {% endif %}
                         </div>
